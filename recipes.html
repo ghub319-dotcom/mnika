@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GreenBite — Recipes</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="container nav">
+  <div class="brand"><div class="logo">GB</div><div><div style="font-weight:700">GreenBite</div></div></div>
+  <nav><div class="menu"><a href="index.html">Home</a><a href="recipes.html">Recipes</a><a href="calculator.html">Calculator</a></div></nav>
+</header>
+
+<main class="container">
+  <h2>Healthy Recipes</h2>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem">
+    <input id="search" placeholder="Search by name" style="flex:1"/>
+    <select id="filter">
+      <option value="">All categories</option>
+      <option>Vegetarian</option><option>Meat</option><option>Vegan</option>
+    </select>
+    <button class="btn" id="clear">Clear</button>
+  </div>
+  <div id="recipes" class="cards"></div>
+</main>
+
+<div id="modal" class="modal hidden" onclick="if(event.target.id==='modal') closeModal()"><div class="modal-inner" id="modal-inner"></div></div>
+
+<script src="scripts/common.js"></script>
+<script>
+const RECIPES = [
+  {id:1,title:'Quinoa Salad',category:'Vegetarian',desc:'Quick quinoa salad with veggies.',img:'assets/q1.svg',
+   ingredients:['1 cup quinoa','2 cups water','1 cucumber','Cherry tomatoes','Olive oil'], steps:['Rinse quinoa','Boil water and add quinoa','Mix with chopped veggies'], nutrition:{cal:350,carb:45,prot:10,fat:12}},
+  {id:2,title:'Grilled Chicken & Veg',category:'Meat',desc:'Simple grilled chicken with mixed veg',img:'assets/chicken.svg',
+   ingredients:['150g chicken breast','Salt & pepper','Mixed vegetables'], steps:['Season and grill chicken','Saute vegetables','Serve together'], nutrition:{cal:420,carb:20,prot:38,fat:18}},
+  {id:3,title:'Berry Smoothie',category:'Vegan',desc:'Blend berries with banana and oat milk.',img:'assets/smoothie.svg',
+   ingredients:['1 cup berries','1 banana','1 cup oat milk'], steps:['Add ingredients to blender','Blend until smooth','Serve chilled'], nutrition:{cal:220,carb:45,prot:4,fat:3}}
+];
+
+const container = document.getElementById('recipes');
+function render(list){
+  container.innerHTML = '';
+  list.forEach(r=>{
+    const el = document.createElement('div');
+    el.className='card';
+    el.innerHTML = `<img src="${r.img}" class="recipe-img"><h4>${r.title}</h4><p class="small">${r.desc}</p><button class="btn small" onclick='openRecipe(${r.id})'>Open</button>`;
+    container.appendChild(el);
+  });
+}
+render(RECIPES);
+
+document.getElementById('search').addEventListener('input', e=>{
+  const v = e.target.value.toLowerCase();
+  const f = document.getElementById('filter').value;
+  const filtered = RECIPES.filter(r=>r.title.toLowerCase().includes(v) && (f? r.category===f : true));
+  render(filtered);
+});
+document.getElementById('filter').addEventListener('change', ()=>document.getElementById('search').dispatchEvent(new Event('input')));
+document.getElementById('clear').addEventListener('click', ()=>{document.getElementById('search').value='';document.getElementById('filter').value='';render(RECIPES)});
+
+function openRecipe(id){
+  const r = RECIPES.find(x=>x.id===id);
+  const html = `<h3>${r.title}</h3><img src="${r.img}" style="width:100%;height:200px;object-fit:cover;border-radius:8px"><h4>Ingredients</h4><ul>${r.ingredients.map(i=>`<li>${i}</li>`).join('')}</ul><h4>Steps</h4><ol>${r.steps.map(s=>`<li>${s}</li>`).join('')}</ol><h4>Nutrition</h4><table border="1" cellpadding="6"><tr><th>Calories</th><th>Carbs(g)</th><th>Protein(g)</th><th>Fat(g)</th></tr><tr><td>${r.nutrition.cal}</td><td>${r.nutrition.carb}</td><td>${r.nutrition.prot}</td><td>${r.nutrition.fat}</td></tr></table><div style="margin-top:.6rem"><button class="btn" onclick="saveRecipe(${r.id})">Save</button> <button onclick="closeModal()">Close</button></div>`;
+  openModal(html);
+}
+function saveRecipe(id){
+  const saved = storage.load('savedRecipes')||[];
+  if(saved.includes(id)){ showToast('Already saved'); return; }
+  saved.push(id); storage.save('savedRecipes', saved); showToast('Recipe saved to localStorage');
+}
+</script>
+</body>
+</html>

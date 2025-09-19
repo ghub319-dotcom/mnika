@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GreenBite — Mindfulness</title><link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="styles.css"></head><body>
+<header class="container nav"><div class="brand"><div class="logo">GB</div></div><nav><div class="menu"><a href="index.html">Home</a><a href="mindfulness.html">Mindfulness</a></div></nav></header>
+<main class="container">
+  <h2>Mindfulness</h2>
+  <div class="card" style="max-width:640px">
+    <div style="text-align:center">
+      <div id="breath" style="width:160px;height:160px;border-radius:50%;margin:0 auto;background:linear-gradient(180deg,#dff7e6,#e6f8ef)"></div>
+      <div style="margin-top:.6rem">
+        <button class="btn" id="start-breath">Start 4-4 Breathing</button>
+        <button id="stop-breath">Stop</button>
+      </div>
+      <div style="margin-top:.8rem">
+        <label>Session length (min): <input id="session-min" type="number" value="1" style="width:60px"/></label>
+        <button class="btn" id="start-session">Start Session</button>
+      </div>
+      <div style="margin-top:.6rem">
+        <button id="ambient-toggle">Toggle Ambient Sound</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="scripts/common.js"></script>
+<script>
+let breathing=false, breathIv=null;
+function animateBreath(){
+  const el = document.getElementById('breath');
+  el.style.transition='transform 4s ease-in-out';
+  el.style.transform='scale(1.15)';
+  setTimeout(()=>{ el.style.transform='scale(0.85)'; },4000);
+}
+document.getElementById('start-breath').addEventListener('click', ()=>{
+  if(breathIv) clearInterval(breathIv);
+  animateBreath(); breathIv = setInterval(animateBreath,8000);
+});
+document.getElementById('stop-breath').addEventListener('click', ()=>{ if(breathIv) clearInterval(breathIv); breathIv=null; document.getElementById('breath').style.transform='scale(1)'; });
+
+document.getElementById('start-session').addEventListener('click', ()=>{
+  const minutes = Number(document.getElementById('session-min').value) || 1;
+  const end = Date.now() + minutes*60*1000;
+  showToast('Session started for '+minutes+' minute(s)');
+  const id = 'sessions';
+  const sessions = storage.load(id) || [];
+  sessions.push({start:new Date().toISOString(),minutes});
+  storage.save(id,sessions);
+});
+
+let audio=null;
+document.getElementById('ambient-toggle').addEventListener('click', ()=>{
+  if(!audio){ audio = new Audio(); audio.src = ''; audio.loop=true; try{ audio.play(); }catch(e){} showToast('Ambient sound would play (placeholder)'); return; }
+  if(audio.paused) audio.play(); else audio.pause();
+});
+</script>
+</body></html>

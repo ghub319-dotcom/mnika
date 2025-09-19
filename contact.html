@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GreenBite — Contact</title><link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="styles.css"></head><body>
+<header class="container nav"><div class="brand"><div class="logo">GB</div></div><nav><div class="menu"><a href="index.html">Home</a><a href="contact.html">Contact</a></div></nav></header>
+<main class="container">
+  <h2>Contact & Feedback</h2>
+  <div class="card" style="max-width:700px">
+    <form id="contact-form" onsubmit="submitForm(event)">
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <input id="name" placeholder="Your name" required>
+        <input id="email" placeholder="Email" required>
+      </div>
+      <textarea id="message" placeholder="Message" rows="5" required style="width:100%;margin-top:.5rem"></textarea>
+      <div style="display:flex;gap:.5rem;margin-top:.5rem">
+        <button class="btn" type="submit">Send</button><button type="reset">Reset</button>
+      </div>
+    </form>
+    <h3 style="margin-top:1rem">FAQ</h3>
+    <div id="faq">
+      <div class="card"><strong>How do I save recipes?</strong><div class="small">Open a recipe and click Save — it stores in localStorage.</div></div>
+      <div class="card"><strong>Can I use this offline?</strong><div class="small">Yes — basic caching via a simple service worker (PWA).</div></div>
+    </div>
+  </div>
+</main>
+
+<script src="scripts/common.js"></script>
+<script>
+function submitForm(e){ e.preventDefault();
+  const name=document.getElementById('name').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const message=document.getElementById('message').value.trim();
+  if(!name||!email||!message){ showToast('Fill all fields'); return; }
+  const fb = storage.load('feedback')||[];
+  fb.push({name,email,message,date:new Date().toISOString()});
+  storage.save('feedback', fb);
+  showToast('Thank you — feedback saved locally');
+  e.target.reset();
+}
+</script>
+</body></html>

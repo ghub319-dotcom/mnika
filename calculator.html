@@ -1,7 +1,42 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GreenBite — Calculator</title><link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="styles.css"></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GreenBite — Calculator</title>
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 <header class="container nav"><div class="brand"><div class="logo">GB</div></div><nav><div class="menu"><a href="index.html">Home</a><a href="recipes.html">Recipes</a></div></nav></header>
 <main class="container">
-  <h2>Calorie & Nutrition Calculator</h2>
+  <!-- ...existing code... -->
+</main>
+
+<script src="scripts/common.js"></script>
+<script src="js/calculator.js"></script>
+</body>
+</html><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GreenBite — Calculator</title><link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="styles.css"></head><body>
+<header class="container nav"><div class="brand"><div class="logo">GB</div></div><nav><div class="menu"><a href="index.html">Home</a><a href="recipes.html">Recipes</a></div></nav></header>
+<main class="container">
+  <div style="text-align:right;font-size:1.1em;margin-bottom:8px;">
+    <span id="clock"></span>
+  </div>
+  <h2 style="text-align:center;font-size:2.2em;color:#0a680d;margin-bottom:0.5em;letter-spacing:1px;">Calorie & Nutrition Calculator</h2>
+  <div style="display:flex;justify-content:center;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:32px;">
+    <div style="background:linear-gradient(135deg,#e6ffe6 60%,#90ee90 100%);border-radius:18px;box-shadow:0 4px 16px #0a680d22;padding:16px 24px;display:flex;flex-direction:column;align-items:center;">
+      <img src="assets/meat-icon.png" alt="Protein" style="width:70px;border-radius:50%;box-shadow:0 2px 8px #0a680d22;margin-bottom:8px;">
+      <span style="font-weight:bold;color:#0a680d;">Protein</span>
+    </div>
+    <div style="background:linear-gradient(135deg,#fffbe6 60%,#ffe090 100%);border-radius:18px;box-shadow:0 4px 16px #0a680d22;padding:16px 24px;display:flex;flex-direction:column;align-items:center;">
+      <img src="assets/carbs.png" alt="Carbs" style="width:70px;border-radius:50%;box-shadow:0 2px 8px #0a680d22;margin-bottom:8px;">
+      <span style="font-weight:bold;color:#e6a800;">Carbs</span>
+    </div>
+    <div style="background:linear-gradient(135deg,#e6f7ff 60%,#90d0ee 100%);border-radius:18px;box-shadow:0 4px 16px #0a680d22;padding:16px 24px;display:flex;flex-direction:column;align-items:center;">
+      <img src="assets/fat.png" alt="Fat" style="width:70px;border-radius:50%;box-shadow:0 2px 8px #0a680d22;margin-bottom:8px;">
+      <span style="font-weight:bold;color:#0a68a0;">Fat</span>
+    </div>
+  </div>
   <form id="calc-form" class="card" style="display:grid;gap:.6rem;max-width:600px">
     <div style="display:flex;gap:.6rem;flex-wrap:wrap">
       <input placeholder="Age (years)" id="age" type="number">
@@ -23,44 +58,17 @@
   </form>
 
   <div id="results" class="card hidden" style="margin-top:1rem"></div>
+  <div id="fact-bar" class="card hidden" style="margin-top:1rem;background:#e6ffe6;color:#0a680d;font-weight:bold;text-align:center;"></div>
 </main>
+
+
+
+
 
 <script src="scripts/common.js"></script>
 <script>
-function calcBMR(age,gender,height,weight){
-  if(gender==='male') return 10*weight + 6.25*height - 5*age + 5;
-  return 10*weight + 6.25*height - 5*age - 161;
-}
-document.getElementById('calc-btn').addEventListener('click', ()=>{
-  const age=Number(document.getElementById('age').value);
-  const gender=document.getElementById('gender').value;
-  const height=Number(document.getElementById('height').value);
-  const weight=Number(document.getElementById('weight').value);
-  const factor=Number(document.getElementById('activity').value);
-  if(!age || !height || !weight){ showToast('Please fill all fields'); return; }
-  const bmr = Math.round(calcBMR(age,gender,height,weight));
-  const tdee = Math.round(bmr * factor);
-  const carbs_g = Math.round((tdee * 0.5)/4);
-  const prot_g = Math.round((tdee * 0.2)/4);
-  const fat_g = Math.round((tdee * 0.3)/9);
-  document.getElementById('results').classList.remove('hidden');
-  document.getElementById('results').innerHTML = `<h3>Results</h3>
-    <p>BMR: <strong>${bmr} kcal</strong></p>
-    <p>TDEE: <strong>${tdee} kcal</strong></p>
-    <h4>Macros</h4>
-    <p>Carbs: ${carbs_g} g · Protein: ${prot_g} g · Fat: ${fat_g} g</p>
-    <div class="progress" style="margin-top:.5rem"><span style="width:${50}%"></span></div>
-    <div style="display:flex;gap:.4rem;margin-top:.6rem">
-      <button class="btn" onclick="saveProfile()">Save profile</button>
-      <button onclick="document.getElementById('results').classList.add('hidden')">Hide</button>
-    </div>`;
-  storage.save('lastCalc',{date: new Date().toISOString(), bmr,tdee,carbs_g,prot_g,fat_g});
-});
-function saveProfile(){
-  const p = storage.load('lastCalc');
-  if(!p){ showToast('No result to save'); return; }
-  storage.save('savedProfile', p);
-  showToast('Profile saved');
-}
+
+
+
 </script>
 </body></html>

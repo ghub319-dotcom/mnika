@@ -5,15 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GreenBite — Contact</title>
 <link rel="icon" href="assets/favicon.png">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="main.css">
 </head>
 <body>
 <header class="container nav">
   <div class="brand"><div class="logo">GB</div></div>
-  <nav><div class="menu"><a href="index.html">Home</a><a href="contact.html">Contact</a></div></nav>
+  <nav>
+    <div class="menu">
+      <a href="index.html">Home</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
 </header>
 
 <main class="container">
+  <div style="text-align:right;font-size:1.1em;margin-bottom:8px;">
+    <span id="clock"></span>
+  </div>
   <h2>Contact & Feedback</h2>
   <div class="card" style="max-width:700px">
     <form id="contact-form" onsubmit="submitForm(event)">
@@ -30,8 +38,14 @@
 
     <h3 style="margin-top:1rem">FAQ</h3>
     <div id="faq">
-      <div class="card"><strong>How do I save recipes?</strong><div class="small">Open a recipe and click Save — it stores in localStorage.</div></div>
-      <div class="card"><strong>Can I use this offline?</strong><div class="small">Yes — basic caching via a simple service worker (PWA).</div></div>
+      <div class="card">
+        <strong>How do I save recipes?</strong>
+        <div class="small">Open a recipe and click Save — it stores in localStorage.</div>
+      </div>
+      <div class="card">
+        <strong>Can I use this offline?</strong>
+        <div class="small">Yes — basic caching via a simple service worker (PWA).</div>
+      </div>
     </div>
 
     <!-- Map Section -->
@@ -42,23 +56,28 @@
         width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
       </iframe>
     </div>
+
   </div>
 </main>
 
 <script src="scripts/common.js"></script>
 <script>
-function submitForm(e){
-  e.preventDefault();
-  const name=document.getElementById('name').value.trim();
-  const email=document.getElementById('email').value.trim();
-  const message=document.getElementById('message').value.trim();
-  if(!name||!email||!message){ showToast('Fill all fields'); return; }
-  const fb = storage.load('feedback')||[];
-  fb.push({name,email,message,date:new Date().toISOString()});
-  storage.save('feedback', fb);
-  showToast('Thank you — feedback saved locally');
-  e.target.reset();
-}
+
+
+
+
+
 </script>
 </body>
 </html>
+ <!-- Workout Video Section -->
+  <h2>Workout Video Guide</h2>
+  <div class="video-container">
+    <iframe 
+      src="https://www.youtube.com/embed/U9ENCvFf9yQ"
+      title="Workout Video"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
